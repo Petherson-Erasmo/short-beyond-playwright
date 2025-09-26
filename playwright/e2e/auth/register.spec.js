@@ -1,19 +1,12 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../../support/fixtures'
 import { getUser } from '../../support/factories/user'
-import { authService } from '../../support/services/auth'
-
-let register
 
 test.describe('Post /auth/register', () => {
-    test.beforeEach(({ request }) => {
-        register = authService(request)
-    })
-    
-    test('Deve cadastrar um novo usuário', async () => {
+    test('Deve cadastrar um novo usuário', async ({ auth }) => {
         // Preparação
         const user = getUser()
         // Ação
-        const response = await register.createUser(user)
+        const response = await auth.createUser(user)
         // Resultado esperado
         expect(response.status()).toBe(201)
         const responseBody = await response.json()
@@ -25,65 +18,65 @@ test.describe('Post /auth/register', () => {
         expect(responseBody.user).not.toHaveProperty('password')
     })
 
-    test('Não deve cadastrar usuário com email já estiver em uso', async () => {
+    test('Não deve cadastrar usuário com email já estiver em uso', async ({ auth }) => {
         const user = getUser()
 
-        const preCondition = await register.createUser(user)
+        const preCondition = await auth.createUser(user)
 
         expect(preCondition.status()).toBe(201)
-        const response = await register.createUser(user)
+        const response = await auth.createUser(user)
         expect(response.status()).toBe(400)
         const responseBody = await response.json()
         expect(responseBody).toHaveProperty('message', 'Este e-mail já está em uso. Por favor, tente outro.')
     })
 
-    test('Não deve cadastrar usuário quando email é inválido', async () => {
+    test('Não deve cadastrar usuário quando email é inválido', async ({ auth }) => {
         const user = {
             name: 'Test User',
             email: 'email&invalido.com',
             password: 'senha123'
         }
 
-        const response = await register.createUser(user)
+        const response = await auth.createUser(user)
 
         expect(response.status()).toBe(400)
         const responseBody = await response.json()
         expect(responseBody).toHaveProperty('message', 'O campo \'Email\' deve ser um email válido')
     })
 
-    test('Não deve cadastrar usuário quando o nome não é informado', async () => {
+    test('Não deve cadastrar usuário quando o nome não é informado', async ({ auth }) => {
         const user = {
             email: 'email&invalido.com',
             password: 'senha123'
         }
-    
-        const response = await register.createUser(user)
+
+        const response = await auth.createUser(user)
 
         expect(response.status()).toBe(400)
         const responseBody = await response.json()
         expect(responseBody).toHaveProperty('message', 'O campo \'Name\' é obrigatório')
     })
 
-    test('Não deve cadastrar usuário quando o email não é informado', async () => {
+    test('Não deve cadastrar usuário quando o email não é informado', async ({ auth }) => {
         const user = {
             name: 'Test User',
             password: 'senha123'
         }
-    
-        const response = await register.createUser(user)
+
+        const response = await auth.createUser(user)
 
         expect(response.status()).toBe(400)
         const responseBody = await response.json()
         expect(responseBody).toHaveProperty('message', 'O campo \'Email\' é obrigatório')
     })
 
-    test('Não deve cadastrar usuário quando a senha não é informada', async () => {
+    test('Não deve cadastrar usuário quando a senha não é informada', async ({ auth }) => {
         const user = {
             name: 'Test User',
             email: 'email@valido.com'            
         }
-    
-        const response = await register.createUser(user)
+
+        const response = await auth.createUser(user)
 
         expect(response.status()).toBe(400)
         const responseBody = await response.json()
