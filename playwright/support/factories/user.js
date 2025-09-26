@@ -25,3 +25,18 @@ export const getUserWithLink = () => {
         }
     }
 }
+
+export const getUserWithMultipleLinks = (linksCount = 1) => {
+    const firstName = faker.person.firstName()
+    const lastName = faker.person.lastName()
+
+    return {
+        name: `${firstName} ${lastName}`,
+        email: faker.internet.email({ firstName, lastName }),
+        password: 'senha123',
+        links: faker.helpers.multiple(() => ({
+            original_url: faker.internet.url(),
+            title: faker.music.songName()
+        }), { count: linksCount })
+    }
+}
