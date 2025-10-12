@@ -2,10 +2,15 @@ import { test, expect } from '@playwright/test'
 import { getUser } from '../../support/factories/user'
 import { registerService } from '../../support/services/register'
 
+let register
+
 test.describe('Post /auth/register', () => {
+    test.beforeEach((request) => {
+        register = registerService(request)
+    })
+
     test('Deve cadastrar um novo usuário', async ({ request }) => {
         // Preparação
-        const register = registerService(request)
         const user = getUser()
         // Ação
         const response = await register.createUser(user)
@@ -21,7 +26,6 @@ test.describe('Post /auth/register', () => {
     })
 
     test('Não deve cadastrar usuário com email já estiver em uso', async ({ request }) => {
-        const register = registerService(request)
         const user = getUser()
 
         const preCondition = await register.createUser(user)
@@ -34,7 +38,6 @@ test.describe('Post /auth/register', () => {
     })
 
     test('Não deve cadastrar usuário quando email é inválido', async ({ request }) => {
-        const register = registerService(request)
         const user = {
             name: 'Test User',
             email: 'email&invalido.com',
@@ -49,7 +52,6 @@ test.describe('Post /auth/register', () => {
     })
 
     test('Não deve cadastrar usuário quando o nome não é informado', async ({ request }) => {
-        const register = registerService(request)
         const user = {
             email: 'email&invalido.com',
             password: 'senha123'
@@ -63,7 +65,6 @@ test.describe('Post /auth/register', () => {
     })
 
     test('Não deve cadastrar usuário quando o email não é informado', async ({ request }) => {
-        const register = registerService(request)
         const user = {
             name: 'Test User',
             password: 'senha123'
@@ -77,7 +78,6 @@ test.describe('Post /auth/register', () => {
     })
 
     test('Não deve cadastrar usuário quando a senha não é informada', async ({ request }) => {
-        const register = registerService(request)
         const user = {
             name: 'Test User',
             email: 'email@valido.com'
