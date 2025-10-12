@@ -5,11 +5,11 @@ import { registerService } from '../../support/services/register'
 let register
 
 test.describe('Post /auth/register', () => {
-    test.beforeEach((request) => {
+    test.beforeEach(({ request }) => {
         register = registerService(request)
     })
-
-    test('Deve cadastrar um novo usuário', async ({ request }) => {
+    
+    test('Deve cadastrar um novo usuário', async () => {
         // Preparação
         const user = getUser()
         // Ação
@@ -25,7 +25,7 @@ test.describe('Post /auth/register', () => {
         expect(responseBody.user).not.toHaveProperty('password')
     })
 
-    test('Não deve cadastrar usuário com email já estiver em uso', async ({ request }) => {
+    test('Não deve cadastrar usuário com email já estiver em uso', async () => {
         const user = getUser()
 
         const preCondition = await register.createUser(user)
@@ -37,7 +37,7 @@ test.describe('Post /auth/register', () => {
         expect(responseBody).toHaveProperty('message', 'Este e-mail já está em uso. Por favor, tente outro.')
     })
 
-    test('Não deve cadastrar usuário quando email é inválido', async ({ request }) => {
+    test('Não deve cadastrar usuário quando email é inválido', async () => {
         const user = {
             name: 'Test User',
             email: 'email&invalido.com',
@@ -51,12 +51,12 @@ test.describe('Post /auth/register', () => {
         expect(responseBody).toHaveProperty('message', 'O campo \'Email\' deve ser um email válido')
     })
 
-    test('Não deve cadastrar usuário quando o nome não é informado', async ({ request }) => {
+    test('Não deve cadastrar usuário quando o nome não é informado', async () => {
         const user = {
             email: 'email&invalido.com',
             password: 'senha123'
         }
-
+    
         const response = await register.createUser(user)
 
         expect(response.status()).toBe(400)
@@ -64,12 +64,12 @@ test.describe('Post /auth/register', () => {
         expect(responseBody).toHaveProperty('message', 'O campo \'Name\' é obrigatório')
     })
 
-    test('Não deve cadastrar usuário quando o email não é informado', async ({ request }) => {
+    test('Não deve cadastrar usuário quando o email não é informado', async () => {
         const user = {
             name: 'Test User',
             password: 'senha123'
         }
-
+    
         const response = await register.createUser(user)
 
         expect(response.status()).toBe(400)
@@ -77,12 +77,12 @@ test.describe('Post /auth/register', () => {
         expect(responseBody).toHaveProperty('message', 'O campo \'Email\' é obrigatório')
     })
 
-    test('Não deve cadastrar usuário quando a senha não é informada', async ({ request }) => {
+    test('Não deve cadastrar usuário quando a senha não é informada', async () => {
         const user = {
             name: 'Test User',
-            email: 'email@valido.com'
+            email: 'email@valido.com'            
         }
-
+    
         const response = await register.createUser(user)
 
         expect(response.status()).toBe(400)
