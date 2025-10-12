@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test'
 import { getUser } from '../../support/factories/user'
-import { registerService } from '../../support/services/register'
+import { authService } from '../../support/services/auth'
 
 let register
 
 test.describe('Post /auth/register', () => {
     test.beforeEach(({ request }) => {
-        register = registerService(request)
+        register = authService(request)
     })
     
     test('Deve cadastrar um novo usuário', async () => {
