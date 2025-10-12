@@ -1,16 +1,10 @@
 import { test, expect } from '@playwright/test'
-import { faker } from '@faker-js/faker'
+import { getUser } from '../../support/factories/user'
 
 test.describe('Post /auth/register', () => {
     test('Deve cadastrar um novo usuário', async ({ request }) => {
-        const firstName = faker.person.firstName()
-        const lastName = faker.person.lastName()
+        const user = getUser()
 
-        const user = {
-            name: `${firstName} ${lastName}`,
-            email: faker.internet.email({ firstName, lastName }), // como o nome das contante são iguais, não preciso passar o valor
-            password: 'senha123'
-        }
         const response = await request.post('http://localhost:3333/api/auth/register', {
             data: user
         })
@@ -27,14 +21,8 @@ test.describe('Post /auth/register', () => {
     })
 
     test('Não deve cadastrar usuário com email já estiver em uso', async ({ request }) => {
-        const firstName = faker.person.firstName()
-        const lastName = faker.person.lastName()
+        const user = getUser()
 
-        const user = {
-            name: `${firstName} ${lastName}`,
-            email: faker.internet.email({ firstName, lastName }),
-            password: 'senha123'
-        }
         const preCondition = await request.post('http://localhost:3333/api/auth/register', {
             data: user
         })
