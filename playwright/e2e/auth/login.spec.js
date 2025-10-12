@@ -1,15 +1,8 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../../support/fixtures'
 import { getUser } from '../../support/factories/user'
-import { authService } from '../../support/services/auth'
-
-let auth
 
 test.describe('Post /auth/login', () => {
-    test.beforeEach(({ request }) => {
-        auth = authService(request)
-    })
-
-    test('Deve fazer login com sucesso', async () => {
+    test('Deve fazer login com sucesso', async ({ auth }) => {
         const user = getUser()
         const respCreateUser = await auth.createUser(user)
         expect(respCreateUser.status()).toBe(201)
@@ -26,7 +19,7 @@ test.describe('Post /auth/login', () => {
         expect(responseBody.data.user).not.toHaveProperty('password')
     })
 
-    test('Não deve fazer login com senha incorreta', async () => {
+    test('Não deve fazer login com senha incorreta', async ({ auth }) => {
         const user = getUser()
         const respCreateUser = await auth.createUser(user)
         expect(respCreateUser.status()).toBe(201)
@@ -38,7 +31,7 @@ test.describe('Post /auth/login', () => {
         expect(responseBody).toHaveProperty('message', 'Credenciais inválidas')
     })
 
-    test('Não deve fazer login com email incorreto', async () => {
+    test('Não deve fazer login com email incorreto', async ({ auth }) => {
         const user = {
             email: 'emailErrado@example.com',
             password: 'senha123'
@@ -50,7 +43,7 @@ test.describe('Post /auth/login', () => {
         expect(responseBody).toHaveProperty('message', 'Credenciais inválidas')
     })
 
-    test('Não deve fazer login quando o email não é informado', async () => {
+    test('Não deve fazer login quando o email não é informado', async ({ auth }) => {
         const user = {
             password: 'senha123'
         }
@@ -61,7 +54,7 @@ test.describe('Post /auth/login', () => {
         expect(responseBody).toHaveProperty('message', 'O campo \'Email\' é obrigatório')
     })
 
-    test('Não deve fazer login quando a senha não é informada', async () => {
+    test('Não deve fazer login quando a senha não é informada', async ({ auth }) => {
         const user = {
             email: 'email@example.com'
         }
