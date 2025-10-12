@@ -6,7 +6,7 @@ export const getUser = () => {
 
     return {
         name: `${firstName} ${lastName}`,
-        email: faker.internet.email({ firstName, lastName }), // como o nome das contante são iguais, não preciso passar o valor
+        email: faker.internet.email({ firstName, lastName, provider: 'test.peth' }), // como o nome das contante são iguais, não preciso passar o valor
         password: 'senha123'
     }
 }
@@ -17,7 +17,7 @@ export const getUserWithLink = () => {
 
     return {
         name: `${firstName} ${lastName}`,
-        email: faker.internet.email({ firstName, lastName }),
+        email: faker.internet.email({ firstName, lastName, provider: 'test.peth' }),
         password: 'senha123',
         link: {
             original_url: faker.internet.url(),
@@ -32,7 +32,7 @@ export const getUserWithMultipleLinks = (linksCount = 1) => {
 
     return {
         name: `${firstName} ${lastName}`,
-        email: faker.internet.email({ firstName, lastName }),
+        email: faker.internet.email({ firstName, lastName, provider: 'test.peth' }),
         password: 'senha123',
         links: faker.helpers.multiple(() => ({
             original_url: faker.internet.url(),
