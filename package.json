@@ -1,0 +1,22 @@
+{
+  "name": "short-beyond-playwright",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Petherson-Erasmo/short-beyond-playwright.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Petherson-Erasmo/short-beyond-playwright/issues"
+  },
+  "homepage": "https://github.com/Petherson-Erasmo/short-beyond-playwright#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.7.2"
+  }
+}
