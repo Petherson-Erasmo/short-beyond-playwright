@@ -5,10 +5,10 @@ test.describe('Post /auth/register', () => {
     test('Deve cadastrar um novo usuário', async ({ request }) => {
         const firstName = faker.person.firstName()
         const lastName = faker.person.lastName()
-        
+
         const user = {
             name: `${firstName} ${lastName}`,
-            email: faker.internet.email({ firstName, lastName}), // como o nome das contante são iguais, não preciso passar o valor
+            email: faker.internet.email({ firstName, lastName }), // como o nome das contante são iguais, não preciso passar o valor
             password: 'senha123'
         }
         const response = await request.post('http://localhost:3333/api/auth/register', {
@@ -24,6 +24,94 @@ test.describe('Post /auth/register', () => {
         expect(responseBody.user).toHaveProperty('name', user.name)
         expect(responseBody.user).toHaveProperty('email', user.email)
         expect(responseBody.user).not.toHaveProperty('password')
+    })
 
+    test('Não deve cadastrar usuário com email já estiver em uso', async ({ request }) => {
+        const firstName = faker.person.firstName()
+        const lastName = faker.person.lastName()
+
+        const user = {
+            name: `${firstName} ${lastName}`,
+            email: faker.internet.email({ firstName, lastName }),
+            password: 'senha123'
+        }
+        const preCondition = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+        expect(preCondition.status()).toBe(201)
+
+        const response = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+        expect(response.status()).toBe(400)
+
+        const responseBody = await response.json()
+
+        expect(responseBody).toHaveProperty('message', 'Este e-mail já está em uso. Por favor, tente outro.')
+    })
+
+    test('Não deve cadastrar usuário quando email é inválido', async ({ request }) => {
+        const user = {
+            name: 'Test User',
+            email: 'email&invalido.com',
+            password: 'senha123'
+        }
+
+        const response = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+        expect(response.status()).toBe(400)
+
+        const responseBody = await response.json()
+
+        expect(responseBody).toHaveProperty('message', 'O campo \'Email\' deve ser um email válido')
+    })
+
+    test('Não deve cadastrar usuário quando o nome não é informado', async ({ request }) => {
+        const user = {
+            email: 'email&invalido.com',
+            password: 'senha123'
+        }
+
+        const response = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+        expect(response.status()).toBe(400)
+
+        const responseBody = await response.json()
+
+        expect(responseBody).toHaveProperty('message', 'O campo \'Name\' é obrigatório')
+    })
+
+    test('Não deve cadastrar usuário quando o email não é informado', async ({ request }) => {
+        const user = {
+            name: 'Test User',
+            password: 'senha123'
+        }
+
+        const response = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+        expect(response.status()).toBe(400)
+
+        const responseBody = await response.json()
+
+        expect(responseBody).toHaveProperty('message', 'O campo \'Email\' é obrigatório')
+    })
+
+    test('Não deve cadastrar usuário quando a senha não é informada', async ({ request }) => {
+        const user = {
+            name: 'Test User',
+            email: 'email@valido.com'
+        }
+
+        const response = await request.post('http://localhost:3333/api/auth/register', {
+            data: user
+        })
+        expect(response.status()).toBe(400)
+
+        const responseBody = await response.json()
+
+        expect(responseBody).toHaveProperty('message', 'O campo \'Password\' é obrigatório')
     })
 })
