@@ -1,17 +1,17 @@
 import { test, expect } from '@playwright/test'
 import { getUser } from '../../support/factories/user'
+import { registerService } from '../../support/services/register'
 
 test.describe('Post /auth/register', () => {
     test('Deve cadastrar um novo usuário', async ({ request }) => {
+        // Preparação
+        const register = registerService(request)
         const user = getUser()
-
-        const response = await request.post('http://localhost:3333/api/auth/register', {
-            data: user
-        })
+        // Ação
+        const response = await register.createUser(user)
+        // Resultado esperado
         expect(response.status()).toBe(201)
-
         const responseBody = await response.json()
-
         expect(responseBody.message).toBe('Usuário cadastrado com sucesso!') // Em caso de erro retorna Undefined
         expect(responseBody).toHaveProperty('message', 'Usuário cadastrado com sucesso!') // Em caso de erro retorna que o campo não foi retornado
         expect(responseBody.user).toHaveProperty('id')
@@ -21,85 +21,72 @@ test.describe('Post /auth/register', () => {
     })
 
     test('Não deve cadastrar usuário com email já estiver em uso', async ({ request }) => {
+        const register = registerService(request)
         const user = getUser()
 
-        const preCondition = await request.post('http://localhost:3333/api/auth/register', {
-            data: user
-        })
+        const preCondition = await register.createUser(user)
+
         expect(preCondition.status()).toBe(201)
-
-        const response = await request.post('http://localhost:3333/api/auth/register', {
-            data: user
-        })
+        const response = await register.createUser(user)
         expect(response.status()).toBe(400)
-
         const responseBody = await response.json()
-
         expect(responseBody).toHaveProperty('message', 'Este e-mail já está em uso. Por favor, tente outro.')
     })
 
     test('Não deve cadastrar usuário quando email é inválido', async ({ request }) => {
+        const register = registerService(request)
         const user = {
             name: 'Test User',
             email: 'email&invalido.com',
             password: 'senha123'
         }
 
-        const response = await request.post('http://localhost:3333/api/auth/register', {
-            data: user
-        })
+        const response = await register.createUser(user)
+
         expect(response.status()).toBe(400)
-
         const responseBody = await response.json()
-
         expect(responseBody).toHaveProperty('message', 'O campo \'Email\' deve ser um email válido')
     })
 
     test('Não deve cadastrar usuário quando o nome não é informado', async ({ request }) => {
+        const register = registerService(request)
         const user = {
             email: 'email&invalido.com',
             password: 'senha123'
         }
 
-        const response = await request.post('http://localhost:3333/api/auth/register', {
-            data: user
-        })
+        const response = await register.createUser(user)
+
         expect(response.status()).toBe(400)
-
         const responseBody = await response.json()
-
         expect(responseBody).toHaveProperty('message', 'O campo \'Name\' é obrigatório')
     })
 
     test('Não deve cadastrar usuário quando o email não é informado', async ({ request }) => {
+        const register = registerService(request)
         const user = {
             name: 'Test User',
             password: 'senha123'
         }
 
-        const response = await request.post('http://localhost:3333/api/auth/register', {
-            data: user
-        })
+        const response = await register.createUser(user)
+
         expect(response.status()).toBe(400)
-
         const responseBody = await response.json()
-
         expect(responseBody).toHaveProperty('message', 'O campo \'Email\' é obrigatório')
     })
 
     test('Não deve cadastrar usuário quando a senha não é informada', async ({ request }) => {
+        const register = registerService(request)
         const user = {
             name: 'Test User',
             email: 'email@valido.com'
         }
 
-        const response = await request.post('http://localhost:3333/api/auth/register', {
-            data: user
-        })
+        const response = await register.createUser(user)
+
         expect(response.status()).toBe(400)
-
         const responseBody = await response.json()
-
         expect(responseBody).toHaveProperty('message', 'O campo \'Password\' é obrigatório')
     })
 })
