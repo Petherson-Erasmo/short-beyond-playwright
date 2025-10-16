@@ -4,6 +4,8 @@ Testes de API e E2E com Playwright para um encurtador de links.
 
 Este projeto foi criado como parte do Bootcamp "Playwright Além da Interface" do Fernando Papito. O objetivo é praticar testes de API REST (auth e links) usando Playwright Test, com dados dinâmicos via Faker e fixtures/serviços para melhor organização.
 
+> 🎬 **Quer ver a aplicação funcionando?** Confira a [demonstração em vídeo](#demonstração-em-vídeo) no final deste README mostrando a aplicação rodando e os testes sendo executados.
+
 ## Sumário
 - Visão Geral
 - Stack
@@ -211,3 +213,10 @@ podman run hello-world
 
 > 🎯 Interface Gráfica: O Podman Desktop oferece uma interface amigável para gerenciar containers, imagens e volumes
 >
+---
+
+## 🎬 Demonstração em vídeo
+
+Confira abaixo a demonstração da aplicação funcionando e os testes sendo executados com Playwright:
+
+<video src="video/demonstracao.mp4" controls autoplay loop muted playsinline style="max-width:100%;"></video>
