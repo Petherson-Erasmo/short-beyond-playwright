@@ -18,7 +18,7 @@ async function cleanupTestData() {
 
     const query = `
       WITH usuarios_para_deletar AS (
-        SELECT id FROM users WHERE email LIKE '%@papito.dev'
+        SELECT id FROM users WHERE email LIKE '%@test.peth'
       ),
       delete_links AS (
         DELETE FROM links
