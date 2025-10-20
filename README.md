@@ -4,7 +4,7 @@ Testes de API e E2E com Playwright para um encurtador de links.
 
 Este projeto foi criado como parte do Bootcamp "Playwright Além da Interface" do Fernando Papito. O objetivo é praticar testes de API REST (auth e links) usando Playwright Test, com dados dinâmicos via Faker e fixtures/serviços para melhor organização.
 
-> 🎬 **Quer ver a aplicação funcionando?** Confira a [demonstração em vídeo](#demonstração-em-vídeo) no final deste README mostrando a aplicação rodando e os testes sendo executados.
+> 🎬 **Quer ver a aplicação funcionando?** Confira a [demonstração em vídeo](#-demonstração-em-vídeo) no final deste README mostrando a aplicação rodando e os testes sendo executados.
 
 ## Sumário
 - Visão Geral
