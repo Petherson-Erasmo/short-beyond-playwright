@@ -219,4 +219,4 @@ podman run hello-world
 
 Confira abaixo a demonstração da aplicação funcionando e os testes sendo executados com Playwright:
 
-<video src="video/demonstracao.mp4" controls autoplay loop muted playsinline style="max-width:100%;"></video>
+![Demonstração da aplicação e testes executando](video/demonstracao.gif)
